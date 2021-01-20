@@ -1,0 +1,7 @@
+- This is going in the right direction, as per the tutorials we had together.
+- Make sure in the next phase your submission is named correctly, as specified in the guidelines of the course.
+- Habit and Habits is a no-go naming convention. Name the latter HabitList or something. It might make sense to you, but can be highly confusing when reading it. See here: "imports class Habit from module Habits" from what I read above, Habit is defined in habit.py, not in habits.py, so that should be "imports class Habit from module habit(!)". You may have tricked yourself with this, but it's important to get right.
+- I like your staged CLI / menu idea, that's really convenient for users.
+- Make sure that predefined habits (and their tracking data, which you want to use for testing) are only optionally loaded. users usually want to start "clean".
+- it's not entirely clear to me why you want to store predefined habits as dictionaries. It's possible that makes sense in your implementation.
+- Make sure you take your time to investigate how to test all this (e.g. pytest).
