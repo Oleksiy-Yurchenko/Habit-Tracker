@@ -1,63 +1,64 @@
+"""Module contains class HabitsList."""
+
 from habit import Habit
-from datetime import date
+from database import Database
+from datetime import datetime
 
 
-class HabitsList:
+class HabitsList(Database):
+    """Class HabitsList provides a core functionality of this app to work with the instances of class Habit. Database
+    Class is a mixin. It is inherited by HabitsList Class."""
+
     def __init__(self):
         self.habits = []
 
-    def new_habit(self, name, spec, period, creation_date=date.today(), tracked=False, tracking=[], longest_streak=0):
-        self.habits.append(
-                Habit(name, period, creation_date, spec, tracked, tracking, longest_streak)
-                )
+    def new_habit(self, name, period, spec, tracked=False, creation_datetime=datetime.now(), tracking=None,
+                  longest_streak=0):
+        """Method creates new habit and submits it to database."""
+        habit = Habit(name,
+                      period,
+                      spec,
+                      tracked,
+                      creation_datetime,
+                      tracking if tracking else [],
+                      longest_streak if longest_streak else 0)
+        self.habits.append(habit)
+        self.submit_to_db(habit, Database.name)
 
     def _find_habit(self, habit_id):
+        """Method finds habit and takes habit_id as an argument."""
         if self.habits:
-            return self.habits[habit_id]
-        return None
-
-        #for habit in self.habits:
-            #if str(habit.id) == str(habit_id):
-                #return habit
-        #return None
+            for habit in self.habits:
+                if habit.id == habit_id:
+                    return habit
 
     def delete_habit(self, habit_id):
+        """Method deletes the habit and takes habit_id as an argument. A database row is deleted accordingly."""
         habit = self._find_habit(habit_id)
         if self.habits:
+            self.delete_row(habit, Database.name)
             self.habits.remove(habit)
 
-
-    def modify_name(self, habit_id, name):
-        habit = self._find_habit(habit_id)
-        if habit:
-            habit.name = name
-            return True
-        return False
-
-    def modify_period(self, habit_id, period):
-        habit = self._find_habit(habit_id)
-        if habit:
-            habit.period = period
-            return True
-        return False
-
-    def modify_spec(self, habit_id, spec):
-        habit = self._find_habit(habit_id)
-        if habit:
-            habit.spec = spec
-            return True
-        return False
-
     def track_habit(self, habit_id, tracked=True):
+        """Method tracks habit and takes habit_id as an argument. if the Flag tracked is set to false method track off
+        habit. A database row is updated accordingly."""
         habit = self._find_habit(habit_id)
-        habit.tracked = tracked
+        if habit:
+            habit.tracked = tracked
+            self.update_db_row(habit, Database.name)
 
     def check_off(self, habit_id):
+        """Method checks off habit and takes habit_id as an argument. Method looks for the last entry in the
+        habit.tracking and resets habit.tracking if habit's streak is broken. A database row is updated accordingly."""
         habit = self._find_habit(habit_id)
-        return habit.tracking.append(date.today()) #datetime.datetime.now().timestamp())
-
-    def search(self, filter):
-        return [habit for habit in self.habits if habit.match(filter)]
-
-    def analyze_tracking(self, habit_id):
-        print(self._find_habit(habit_id).tracking)
+        if not habit.tracking:
+            habit.tracking.append(datetime.now())
+        else:
+            last_entry = habit.tracking[-1]
+            if isinstance(last_entry, str):
+                last_entry = datetime.strptime(last_entry, '%Y-%m-%d %H:%M:%S.%f')
+            if (datetime.now() - last_entry).days - habit.period > 0:
+                habit.tracking = [datetime.now()]
+            else:
+                habit.tracking.append(datetime.now())
+        self.update_db_row(habit, Database.name)

@@ -1,97 +1,50 @@
-from sqlalchemy import Column, Integer, UnicodeText, Boolean, Date, PickleType
-from base import Base
+"""Module contains class Habit."""
 
-#from random import choice
-#from string import letters
+from datetime import datetime
 
-import datetime
 
-last_id = 0
+class Habit:
+    """Class Habit models a habit with the following attributes: name, period, spec, _tracked, creation_datetime, id,
+    _tracking, _longest_streak."""
+    last_id = 0
 
-#engine = create_engine('sqlite:////tmp/test.db', echo=True)
-#Base = declarative_base(bind=engine)
-#Session = sessionmaker(bind=engine)
-#s = Session()
-
-class Habit(Base):
-    __tablename__ = 'habits'
-    id = Column(Integer, primary_key=True)
-    name = Column(UnicodeText)
-    spec = Column(UnicodeText, nullable=True)
-    period = Column(UnicodeText)
-    tracked = Column(Boolean)
-    creation_date = Column(Date)
-    tracking = Column(PickleType)
-    longest_streak = Column(UnicodeText)
-
-    
-    def __init__(self, name, period, creation_date=datetime.date.today(), spec="", tracked=False,
-                 tracking=[], longest_streak=0):
+    def __init__(self, name, period, spec='', tracked=False, creation_datetime=datetime.now(),
+                 tracking=None, longest_streak=0):
         self.name = name
         self.spec = spec
         self.period = period
-        self.tracked = tracked
-        self.creation_date = creation_date #datetime.date.today()
-        global last_id
-        last_id += 1
-        self.id = last_id
-        self.tracking = tracking # = TrackingList()
-        self.longest_streak = longest_streak
+        self._tracked = tracked
+        self.creation_datetime = creation_datetime
+        self.id = Habit._generate_order_id()
+        self._tracking = tracking
+        self._longest_streak = longest_streak
 
-    def match(self, filter):
-        return filter in self.name
-    '''
-#Base.metadata.create_all()
+    @ classmethod
+    def _generate_order_id(cls):
+        """Class method generates Habit id."""
+        Habit.last_id += 1
+        return Habit.last_id
 
+    @ property
+    def tracked(self):
+        return self._tracked
 
+    @ tracked.setter
+    def tracked(self, value):
+        self._tracked = value
 
-'''
-#class TrackingList(List):
-    
-'''
+    @ property
+    def tracking(self):
+        return self._tracking
 
+    @ tracking.setter
+    def tracking(self, value):
+        self._tracking = value
 
-class HabitsList:
-    def __init__(self):
-        self.habits = []
+    @ property
+    def longest_streak(self):
+        return self._longest_streak
 
-    def new_habit(self, name, period, spec):
-        self.habits.append(Habit(name, period, spec))
-
-    def _find_habit(self, habit_id):
-        for habit in self.habits:
-            if str(habit.id) == str(habit_id):
-                return habit
-        return None
-
-    def modify_name(self, habit_id, name):
-        habit = self._find_habit(habit_id)
-        if habit:
-            habit.name = name
-            return True
-        return False
-
-    def modify_period(self, habit_id, period):
-        habit = self._find_habit(habit_id)
-        if habit:
-            habit.period = period
-            return True
-        return False
-
-    def modify_spec(self, habit_id, spec):
-        habit = self._find_habit(habit_id)
-        if habit:
-            habit.spec = spec
-            return True
-        return False
-
-    def check_off(self, habit_id):
-        habit = self._find_habit(habit_id)
-        return habit.tracking.append(datetime.datetime.now().timestamp())
-
-    def search(self, filter):
-        return [habit for habit in self.habits if habit.match(filter)]
-
-    def analyze_tracking(self, habit_id):
-        print(self._find_habit(habit_id).tracking)
-'''
+    @ longest_streak.setter
+    def longest_streak(self, value):
+        self._longest_streak = value

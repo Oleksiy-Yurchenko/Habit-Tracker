@@ -74,6 +74,7 @@ def main_menu(habits_list):
         elif choice == 2:
             show_habits(habits_list.habits)
             add_habit(habits_list)
+            break
         elif choice == 3:
             non_tracked_list = tracked(habits_list.habits, tracked_status=False)
             show_habits(non_tracked_list, tracked=False)
@@ -81,6 +82,7 @@ def main_menu(habits_list):
                 track(non_tracked_list, habits_list)
             else:
                 print('There are no habits to track. Possibly all habits are tracked already.')
+            break
         elif choice == 4:
             tracked_list = tracked(habits_list.habits)
             show_habits(tracked_list)
@@ -88,17 +90,21 @@ def main_menu(habits_list):
                 track_off(tracked_list, habits_list)
             else:
                 print('There are no habits to track off. Create more habits.')
+            break
         elif choice == 5:
             show_habits(habits_list.habits)
             check_off(habits_list.habits, habits_list)
+            break
         elif choice == 6:
             if habits_list.habits:
                 show_habits(habits_list.habits)
                 delete_habit(habits_list.habits, habits_list)
             else:
                 print("There are no habits to delete.")
+            break
         elif choice == 7:
             load_predefined(PREDEFINED_HABITS, habits_list)
+            break
         elif choice == 0:
             quit_app()
         else:
