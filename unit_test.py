@@ -1,5 +1,4 @@
 import unittest
-from unittest.mock import patch
 from start import *
 from database import Database
 from analytics import tracked, same_period, longest_streak

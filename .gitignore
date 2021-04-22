@@ -1,1 +1,6 @@
-db.db
+test_db.db
+habits_list.db
+.idea
+base.py
+*.pyc
+__pychache__
