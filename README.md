@@ -21,6 +21,10 @@
 #habit  we track, track off or check off habits. Option ‘delete habit’ allows us to delete a habit. We can as well load predefined habits. 
 #There are 7 predefined habits with 4 weekly tracking period.
 #
-#In this sub menu we can get access to the habits itself. By pressing 1 we can get a list of all habits. By pressing 2 – activated function tracked() from module analytics and #we can get a list of all tracked habits. By pressing 3 – activated function same_period() from module analytics and we can get list of habits with the same period. 
-#By pressing 4 – activated function longest_streak() from module analytics and we can get a habit with the longest streak among all habits. By pressing 5 – we can a habit with #the longest streak among selected habits.
+#In this sub menu we can get access to the habits itself. 
+By pressing 1 we can get a list of all habits. 
+By pressing 2 – activated function tracked() from module analytics and #we can get a list of all tracked habits. 
+By pressing 3 – activated function same_period() from module analytics and we can get list of habits with the same period. 
+#By pressing 4 – activated function longest_streak() from module analytics and we can get a habit with the longest streak among all habits. 
+By pressing 5 – we can a habit with #the longest streak among selected habits.
 
